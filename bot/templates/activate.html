@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activate - NAIJA EARN</title>
+    <link rel="stylesheet" href="{% static 'css/activate.css' %}">
+</head>
+<body>
+    <div class="container">
+        <!-- Logo Section -->
+        <header class="header">
+            <div class="logo-container">
+                <div class="logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                    </svg>
+                    <h1>NAIJA EARN</h1>
+                </div>
+                <img src="{% static 'images/naijaearn.png' %}" alt="NAIJA EARN Logo" class="logo-image">
+            </div>
+        </header>
+        
+        <button id="themeToggle" class="theme-toggle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon sun-icon">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon moon-icon">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="welcome-message">
+                <h2>Hello {{user.first_name}}, Welcome to NAIJA EARN, Where you can earn money by completing simple tasks, referring your friends and participating on giveaways</h2>
+            </div>
+
+            <div class="activation-section">
+                <div class="activation-header">
+                    <h3>ACTIVATION KEY</h3>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                    </svg>
+                </div>
+
+                <form id="activationForm" class="activation-form">
+                    {% csrf_token %}
+                    <div class="input-container">
+                        <label for="activationKey" class="inputkey">Input your activation Key here</label>
+                        <div class="key-input">
+                            <input type="text" maxlength="1" class="key-digit" required>
+                            <input type="text" maxlength="1" class="key-digit" required>
+                            <input type="text" maxlength="1" class="key-digit" required>
+                            <input type="text" maxlength="1" class="key-digit" required>
+                            <input type="text" maxlength="1" class="key-digit" required>
+                            <input type="text" maxlength="1" class="key-digit" required>
+                        </div>
+                        <div class="clipboard-container">
+                            <div class="paste-clipboard">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                                </svg>
+                                Paste from Clipboard
+                            </div>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="no-key">
+                    <a href="https://t.me/{{ bot_username }}?start=activation_key" class="no-key-link">
+                        Don't have an Activation Key? Click Here
+                    </a>
+                </div>
+                
+            </div>
+        </main>
+    </div>
+
+    <!-- Popup for notifications -->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <div class="popup-message"></div>
+            <button class="popup-close">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Clipboard permission notification -->
+    <div class="clipboard-permission">
+        Please allow clipboard access to paste your activation key
+    </div>
+
+    <script src="{% static 'js/activate.js' %}"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        const tgApp = window.Telegram.WebApp;
+        tgApp.ready();
+        tgApp.expand();
+    </script>
+</body>
+</html>
+

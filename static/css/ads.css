@@ -1,0 +1,506 @@
+/* Ads Page Specific Styles */
+.banner-container {
+    width: 100%;
+    height: 180px;
+    background: rgba(26, 30, 46, 0.5);
+    border-radius: var(--card-radius);
+    margin-bottom: 2rem;
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--shadow-medium);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all var(--transition-normal);
+  }
+  
+  .banner-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(65, 131, 255, 0.1), rgba(58, 117, 229, 0.2));
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    border-radius: var(--card-radius);
+    margin: 10px;
+  }
+  
+  .ads-intro {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding: 0 1rem;
+  }
+  
+  .ads-intro h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+  }
+  
+  .ads-intro p {
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  
+  .ads-section {
+    background: rgba(26, 30, 46, 0.7);
+    border-radius: var(--card-radius);
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+    box-shadow: var(--shadow-medium);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all var(--transition-normal);
+  }
+  
+  .ads-section:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-large);
+  }
+  
+  .whatsapp-section {
+    border-left: 4px solid #25d366;
+  }
+  
+  .telegram-section {
+    border-left: 4px solid #0088cc;
+  }
+  
+  .ads-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+  
+  .platform-logo {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .whatsapp-logo {
+    background-color: #25d366;
+    padding: 10px;
+  }
+  
+  .telegram-logo {
+    background-color: #0088cc;
+    padding: 10px;
+  }
+  
+  .ads-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .ads-description {
+    margin-bottom: 2rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  
+  .pricing-cards {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  
+  .pricing-card {
+    background: rgba(42, 48, 66, 0.7);
+    border-radius: var(--card-radius);
+    padding: 1.5rem;
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+    box-shadow: var(--shadow-small);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .pricing-card::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+    transform: rotate(30deg);
+    pointer-events: none;
+  }
+
+  /* Add this to the end of your ads.css file */
+.whatsapp-float {
+  position: fixed;
+  bottom: 80px; /* Position above the bottom navigation */
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: #25d366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.whatsapp-float i {
+  font-size: 24px;
+}
+
+/* Remove any existing dragging-related styles */
+.whatsapp-float.dragging {
+  opacity: 0.8;
+}
+
+  
+  .pricing-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .pricing-card.featured {
+    border: 1px solid var(--primary-color);
+    transform: scale(1.05);
+    z-index: 1;
+  }
+  
+  .pricing-card.featured:hover {
+    transform: scale(1.05) translateY(-10px);
+  }
+  
+  .pricing-badge {
+    position: absolute;
+    top: 12px;
+    right: -30px;
+    background: var(--primary-color);
+    color: white;
+    padding: 5px 30px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transform: rotate(45deg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .pricing-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .pricing-header h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+  
+  .price span {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+  
+  .pricing-features {
+    margin-bottom: 1.5rem;
+  }
+  
+  .pricing-features ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .pricing-features li {
+    padding: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+  }
+  
+  .pricing-features li i {
+    color: var(--success-color);
+    font-size: 0.9rem;
+  }
+  
+  .pricing-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: white;
+    border: none;
+    border-radius: var(--button-radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-small);
+  }
+  
+  .pricing-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+    background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+  }
+  
+  .pricing-btn:active {
+    transform: translateY(0);
+  }
+  
+  .ads-stats {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .stat-item {
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+  }
+  
+  .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.3rem;
+  }
+  
+  .stat-label {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+  
+  .custom-advertising {
+    background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+    border-radius: var(--card-radius);
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .custom-advertising h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .custom-advertising p {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .contact-options {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .contact-btn {
+    padding: 0.8rem 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--button-radius);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-small);
+  }
+  
+  .contact-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .contact-btn.whatsapp-btn:hover {
+    background: #25d366;
+  }
+  
+  .contact-btn.telegram-btn:hover {
+    background: #0088cc;
+  }
+  
+  .faq-section {
+    margin-bottom: 3rem;
+  }
+  
+  .faq-section h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+  }
+  
+  .faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .faq-item {
+    background: rgba(26, 30, 46, 0.7);
+    border-radius: var(--card-radius);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-small);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .faq-question {
+    padding: 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+  }
+  .nav-item.active {
+    color: var(--primary-color);
+  }
+  
+  
+  .faq-question:hover {
+    background: rgba(42, 48, 66, 0.7);
+  }
+  
+  .faq-question h3 {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  
+  .faq-question i {
+    transition: transform var(--transition-normal);
+  }
+  
+  .faq-item.active .faq-question i {
+    transform: rotate(180deg);
+  }
+  
+  .faq-answer {
+    padding: 0 1.2rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-normal), padding var(--transition-normal);
+  }
+  
+  .faq-item.active .faq-answer {
+    padding: 0 1.2rem 1.2rem;
+    max-height: 200px;
+  }
+  
+  .faq-answer p {
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .pricing-cards {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .pricing-card {
+      width: 100%;
+      max-width: 100%;
+    }
+  
+    .pricing-card.featured {
+      transform: scale(1);
+    }
+  
+    .pricing-card.featured:hover {
+      transform: translateY(-10px);
+    }
+  
+    .ads-header {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .contact-options {
+      flex-direction: column;
+    }
+  
+    .contact-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .banner-container {
+      height: 150px;
+    }
+  
+    .banner-placeholder {
+      font-size: 1.2rem;
+    }
+  
+    .ads-intro h2 {
+      font-size: 1.5rem;
+    }
+  
+    .ads-section {
+      padding: 1.5rem;
+    }
+  
+    .platform-logo {
+      width: 50px;
+      height: 50px;
+    }
+  
+    .ads-header h2 {
+      font-size: 1.3rem;
+    }
+  
+    .price {
+      font-size: 1.8rem;
+    }
+  
+    .stat-value {
+      font-size: 1.5rem;
+    }
+  
+    .faq-question h3 {
+      font-size: 0.9rem;
+    }
+  }
+  

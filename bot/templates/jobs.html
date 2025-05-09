@@ -1,0 +1,249 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobs - EARNTASK</title>
+    <link rel="stylesheet" href="{% static 'css/jobs.css' %}">
+</head>
+<body>
+    <div class="container">
+        <!-- Animated Background -->
+        <div class="animated-background"></div>
+        <div id="particles-js" class="particles-container"></div>
+
+        <!-- Header Section -->
+        <header class="header">
+            <div class="user-info">
+                <div class="user-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-7h-2c0-1-1.5-1.5-1.5-1.5"></path>
+                        <path d="M2 9v1c0 1.1.9 2 2 2h1"></path>
+                        <path d="M16 11h0"></path>
+                    </svg>
+                </div>
+                <h1 class="greeting">Hello {{ user.first_name|default:"User" }}</h1>
+            </div>
+            <div class="balance-container">
+                <div class="balance">
+                    <span>NGN {{ user.balance|floatformat:2|default:"0.00" }}</span>
+                    <button id="addBalanceBtn" class="add-balance-btn" title="Add Balance">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="16"></line>
+                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Posted Jobs Section -->
+        <section class="jobs-section">
+            <div class="section-header">
+                <h2>YOUR POSTED JOBS</h2>
+                <div class="icon-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="jobs-table">
+                <div class="table-header">
+                    <div class="table-cell">Job ID</div>
+                    <div class="table-cell">TITLE</div>
+                    <div class="table-cell">PROGRESS</div>
+                    <div class="table-cell">DETAILS</div>
+                </div>
+                
+                {% if posted_jobs %}
+                    {% for job in posted_jobs %}
+                    <div class="table-row">
+                        <div class="table-cell">{{ job.id }}</div>
+                        <div class="table-cell">{{ job.title }}</div>
+                        <div class="table-cell">
+                            <div class="progress-container">
+                                <div class="progress-bar" style="width: {{ job.progress_percentage }}%"></div>
+                                <span class="progress-text">{{ job.completed }}/{{ job.total }}</span>
+                            </div>
+                        </div>
+                        <div class="table-cell">
+                            <a href="{% url 'job_detail' job.id %}" class="view-job-btn">
+                                View Job
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <p>You haven't posted any jobs yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- Available Jobs Section -->
+        <section class="jobs-section">
+            <div class="section-header">
+                <h2>AVAILABLE JOBS</h2>
+                <div class="icon-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="available-jobs">
+                {% if available_jobs %}
+                    {% for job in available_jobs %}
+                    <div class="job-card">
+                        <div class="job-info">
+                            <div class="job-logo">
+                                {% if job.platform_logo %}
+                                    <img src="{{ job.platform_logo.url }}" alt="{{ job.platform }} logo">
+                                {% else %}
+                                    <div class="default-logo">{{ job.platform|slice:":1" }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="job-platform">{{ job.platform|upper }}</div>
+                        </div>
+                        <div class="job-actions">
+                            <button class="start-job-btn" data-job-id="{{ job.id }}">Start Job</button>
+                            <button class="submit-proof-btn" data-job-id="{{ job.id }}">Submit Proof</button>
+                            
+                            <div class="job-progress">
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: {{ job.progress_percentage }}%"></div>
+                                </div>
+                                <div class="progress-text">{{ job.progress_percentage|floatformat:0 }}/100</div>
+                            </div>
+                        </div>
+                        <div class="job-instructions">
+                            <h3>INSTRUCTIONS HERE</h3>
+                            <p>{{ job.instructions }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <p>No available jobs at the moment. Check back later!</p>
+                    </div>
+                {% endif %}
+                
+                <div class="more-jobs">
+                    <p>{% if more_jobs_count %}{{ more_jobs_count }} more jobs available{% else %}No more jobs available{% endif %}</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Floating Action Buttons -->
+        <div class="floating-actions">
+            <a href="{% url 'whatsapp' %}" class="whatsapp-float">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"></path>
+                    <path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1Z"></path>
+                    <path d="M14 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1Z"></path>
+                    <path d="M9.5 13.5c.5 1 1.5 1.5 2.5 1.5s2-.5 2.5-1.5"></path>
+                </svg>
+            </a>
+            <a href="{% url 'create_job' %}" class="create-job-float">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    <line x1="12" y1="11" x2="12" y2="17"></line>
+                    <line x1="9" y1="14" x2="15" y2="14"></line>
+                </svg>
+            </a>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="{% url 'refer' %}?user_id={{ user.telegram_id }}" class="nav-item">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                        <line x1="2" y1="10" x2="22" y2="10"></line>
+                    </svg>
+                </div>
+                <span>REFER & EARN</span>
+            </a>
+            <a href="{% url 'index' %}?user_id={{ user.telegram_id }}" class="nav-item">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                </div>
+                <span>DASHBOARD</span>
+            </a>
+            <a href="{% url 'withdraw' %}?user_id={{ user.telegram_id }}" class="nav-item">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                        <circle cx="12" cy="12" r="2"></circle>
+                        <path d="M6 12h.01M18 12h.01"></path>
+                    </svg>
+                </div>
+                <span>WITHDRAW</span>
+            </a>
+            <a href="{% url 'jobs' %}?user_id={{ user.telegram_id }}" class="nav-item active">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                </div>
+                <span>JOBS</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Gift Code Modal -->
+    <div id="giftCodeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Redeem Gift Code</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="giftCodeForm" method="post" action="{% url 'redeem_gift_code' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="giftCode">Enter your gift code:</label>
+                        <input type="text" id="giftCode" name="gift_code" placeholder="e.g. GIFT-1234-ABCD" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="redeem-btn">Redeem Code</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-content">
+            <span class="toast-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </span>
+            <span class="toast-message"></span>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="{% static 'js/jobs.js' %}"></script>
+</body>
+</html>
+

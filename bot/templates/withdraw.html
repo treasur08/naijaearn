@@ -1,0 +1,516 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdrawal - NAIJA EARN</title>
+    <link rel="stylesheet" href="{% static 'css/withdrawal.css' %}">
+</head>
+<body>
+    <div class="particles-container" id="particles-js"></div>
+    <div class="animated-background"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header class="fade-in">
+            <div class="logo">
+                <img src="{% static 'images/naijaearn.png' %}" alt="NAIJA EARN Logo">
+                <h1>NAIJA EARN</h1>
+            </div>
+            <button class="profile-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#229ED9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+            </button> 
+        </header>
+
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <!-- Balance Card -->
+            <div class="balance-card slide-in">
+                <div class="balance-card-content">
+                    <h3>Selected Balance</h3>
+                    <div class="balance-amount">
+                        <span class="currency">NGN</span>
+                        <span class="amount" id="balanceAmount">{{ user.affiliate_balance }}</span>
+                    </div>
+                </div>
+                <div class="balance-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                </div>
+            </div>
+            <div class="balance-source-selector slide-in">
+                <h3>Select Withdrawal Source</h3>
+                <div class="balance-source-options">
+                    <div class="balance-source-option" id="affiliateBalanceOption">
+                        <input type="radio" id="affiliateBalance" name="balanceSource" value="affiliate" checked>
+                        <label for="affiliateBalance">
+                            <div class="option-icon affiliate-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            </div>
+                            <div class="option-details">
+                                <span class="option-title">Affiliate Balance</span>
+                                <span class="option-balance">₦<span id="affiliateBalanceValue">{{ user.affiliate_balance }}</span></span>
+                                <span class="option-description">Withdraw your affiliate balance to your local account</span>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div class="balance-source-option" id="taskBalanceOption">
+                        <input type="radio" id="taskBalance" name="balanceSource" value="task">
+                        <label for="taskBalance">
+                            <div class="option-icon task-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            </div>
+                            <div class="option-details">
+                                <span class="option-title">Task Balance</span>
+                                <span class="option-balance">₦<span id="taskBalanceValue">{{ user.task_balance }}</span></span>
+                                <span class="option-description">Withdraw your task balance to your local account</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Add a notice about task balance withdrawal restrictions -->
+                <div id="taskBalanceNotice" class="task-balance-notice" style="display: none;">
+                    <div class="notice-icon warning-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    </div>
+                    <div class="notice-text">
+                        <span id="taskWithdrawalMessage">Task balance withdrawals are processed automatically too.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Withdrawal Form Card -->
+            <div class="withdrawal-card slide-in">
+                <div class="card-header">
+                    <h2>Withdrawal</h2>
+                    <p class="welcome-text">Hello, <span class="highlight">{{user.first_name}}</span></p>
+                </div>
+                
+                <div class="min-withdrawal-notice">
+                    <div class="notice-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    </div>
+                    <div class="notice-text">
+                        Minimum withdrawal amount is ₦800 for Affilates and ₦400 for Taskers.
+                    </div>
+                </div>
+                
+                <div class="fee-notice">
+                    <div class="notice-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    </div>
+                    <div class="notice-text">
+                        Note: 6% withdrawal fee will be deducted from your requested amount by Server, Thanks.
+                    </div>
+                </div>
+                
+
+                <form id="withdrawalForm" class="fade-in">
+                    <input type="hidden" id="selectedBalanceType" name="balanceType" value="affiliate">
+                    <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <div class="select-wrapper">
+                            <input type="text" id="amount" name="amount" placeholder="Enter Withdrawal Amount" required>
+                            <div class="input-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                            </div>
+                           
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="bank">Bank</label>
+                        <div class="select-wrapper">
+                            <select id="bank" name="bank" required>
+                                <option value="">Select a Bank For Withdrawal</option>
+                                <option value="al-barakah-mfb">AL-BARAKAH MFB</option>
+                                <option value="9payment">9PSB(9 Payment Service Bank)</option>
+                                <option value="ab-mfb">AB Microfinance bank</option>
+                                <option value="abbey-mb">Abbey Mortgage Bank</option>
+                                <option value="above-only-mfb">Above Only Microfinance bank</option>
+                                <option value="abu-mfb">ABU Microfinance bank</option>
+                                <option value="access">ACCESS BANK PLC</option>
+                                <option value="diamond">ACCESS BANK PLC</option>
+                                <option value="access-money">AccessMoney</option>
+                                <option value="accion-mfb">ACCION MFB</option>
+                                <option value="addosser-mfb">Addosser MFB</option>
+                                <option value="adeyemi-mfb">Adeyemi College Staff Microfinance bank</option>
+                                <option value="ag-mb">AG MORTGAGE BANK PLC</option>
+                                <option value="al-hayat-mfb">Alhayat MFB</option>
+                                <option value="alekun-mfb">Alekun Microfinance bank</option>
+                                <option value="alert-mfb">Alert MFB</option>
+                                <option value="allworkers-mfb">ALLWORKERS MFB</option>
+                                <option value="alpha-kapital-mfb">Alphakapital MFB</option>
+                                <option value="amju-unique-mfb">Amju MFB</option>
+                                <option value="amml-mfb">AMML MICROFINANCE BANK</option>
+                                <option value="apeks-mfb">APEKS Microfinance Bank</option>
+                                <option value="arise-mfb">Arise MFB</option>
+                                <option value="aso-savings">ASO Savings And Loans</option>
+                                <option value="astrapolaris-mfb">Astrapolaris MFB</option>
+                                <option value="auchi-mfb">Auchi Microfinance bank</option>
+                                <option value="baines-mfb">Baines Credit MFB</option>
+                                <option value="balogun-mfb">Balogun Gambari MFB</option>
+                                <option value="bayero-mfb">Bayero MICROFINANCE BANK</option>
+                                <option value="bc-kash-mfb">BC Kash MFB</option>
+                                <option value="bipc-mfb">BIPC MICROFINANCE BANK</option>
+                                <option value="boc-trust-mfb">Boctrust Microfinance Bank</option>
+                                <option value="bosak-mfb">Bosak MFB</option>
+                                <option value="bowen-mfb">Bowen MFB</option>
+                                <option value="brent-mb">Brent Mortgage Bank</option>
+                                <option value="brethren-mfb">BRETHREN MICROFINANCE BANK</option>
+                                <option value="bridgeway-mfb">Bridgeway Microfinance Bank</option>
+                                <option value="brightway-mfb">BRIGHTWAY MFB</option>
+                                <option value="cellulant">Cellulant</option>
+                                <option value="cems-mfb">CEMCS MFB</option>
+                                <option value="chikum-mfb">Chikum Microfinance Bank</option>
+                                <option value="cit-mfb">CIT Microfinance Bank</option>
+                                <option value="citibankng">Citibank Nigeria</option>
+                                <option value="consumer-mfb">CONSUMER MFB</option>
+                                <option value="contec-global">Contec Global</option>
+                                <option value="cmfb">Coronation Merchant Bank</option>
+                                <option value="covenant-mfb">Covenant Microfinance Bank</option>
+                                <option value="credit-afrique-mfb">Credit Afrique MFB</option>
+                                <option value="daylight-mfb">Daylight Microfinance Bank</option>
+                                <option value="e-barcs-mfb">e-BARCs MFB</option>
+                                <option value="eagle-flight-mfb">Eagle Flight MFB</option>
+                                <option value="eartholeum">Eartholeum (Qik Qik)</option>
+                                <option value="eco">ECOBANK NIGERIA PLC</option>
+                                <option value="ecobank-express-account">Ecobank Xpress Account</option>
+                                <option value="edfin-mfb">Edfin MFB</option>
+                                <option value="ekondo-mfb">EKONDO MICROFINANCE BANK</option>
+                                <option value="emeral-mfb">Emeralds MFB</option>
+                                <option value="empire-trust-mfb">Empire Trust MFB</option>
+                                <option value="esan-mfb">Esan MFB</option>
+                                <option value="eso-e-mfb">Eso-E Microfinance Bank</option>
+                                <option value="evangel-mfb">Evangel MFB</option>
+                                <option value="evergreen-mfb">Evergreen MICROFINANCE BANK</option>
+                                <option value="eyowo-mfb">EYOWO MICROFINANCE BANK</option>
+                                <option value="fast-mfb">FAST MFB</option>
+                                <option value="fbn-mortgages-ltd">FBN Mortgages Limited</option>
+                                <option value="fbnquest-meb">FBNQUEST MERCHANT BANK</option>
+                                <option value="fcmb-easy-account">FCMB Easy Account</option>
+                                <option value="fcmb">FIRST CITY MONUMENT BANK</option>
+                                <option value="fct-mfb">FCT MFB</option>
+                                <option value="fed-uni-duste-mfb">FEDERAL UNIVERSITY DUTSE MICROFINANCE BANK</option>
+                                <option value="federalPoly-nasarawa-mfb">FederalPoly NasarawaMFB</option>
+                                <option value="fets">FETS (My Wallet)</option>
+                                <option value="ffs-mfb">FFS Microfinance Bank</option>
+                                <option value="fidelity">FIDELITY BANK PLC</option>
+                                <option value="Fidelity-mobile">Fidelity Mobile</option>
+                                <option value="fidfund-mfb">FidFund MFB</option>
+                                <option value="finatrust-mfb">FINATRUST MICROFINANCE BANK</option>
+                                <option value="firmus-mfb">Firmus MICROFINANCE BANK</option>
+                                <option value="firstbank">FIRST BANK OF NIGERIA PLC</option>
+                                <option value="first-gen-mb">First Generation Mortgage Bank</option>
+                                <option value="first-multiple-mfb">First Multiple MFB</option>
+                                <option value="first-option-mfb">First Option MFB</option>
+                                <option value="first-royal-mfb">First Royal Microfinance Bank</option>
+                                <option value="firstMonie-wallet">FIRSTMONIE WALLET</option>
+                                <option value="flutterwave">Flutterwave Technology solutions Limited</option>
+                                <option value="fortis-mfb">Fortis Microfinance Bank</option>
+                                <option value="fortis-mobile">Fortis Mobile</option>
+                                <option value="fsdh">FSDH</option>
+                                <option value="fullrange-mfb">Full range MFB</option>
+                                <option value="futo-mfb">FUTO MFB</option>
+                                <option value="gashua-mfb">Gashua Microfinance Bank</option>
+                                <option value="gateway-mb">Gateway Mortgage Bank</option>
+                                <option value="globus-bank">Globus Bank</option>
+                                <option value="glory-mfb">Glory MFB</option>
+                                <option value="go-money">GoMoney</option>
+                                <option value="gowans-mfb">GOWANS MFB</option>
+                                <option value="greenbank-mfb">GreenBank MFB</option>
+                                <option value="greenville-mfb">Greenville Microfinance bank</option>
+                                <option value="greenwich-mb">Greenwich Merchant Bank</option>
+                                <option value="grooming-mfb">Grooming Microfinance bank</option>
+                                <option value="gt-mobile">GT Mobile Money</option>
+                                <option value="gtb">GUARANTY TRUST BANK PLC</option>
+                                <option value="hackman-mfb">Hackman Microfinance Bank</option>
+                                <option value="haggai-mb">Haggai Mortgage Bank</option>
+                                <option value="hala-mfb">Hala MFB</option>
+                                <option value="hasal-mfb">HASAL MFB</option>
+                                <option value="hedonmark">Hedonmark</option>
+                                <option value="heritage">HERITAGE BANK</option>
+                                <option value="ibile-mfb">IBILE Microfinance Bank</option>
+                                <option value="ikenne-mfb">IKENNE MFB</option>
+                                <option value="ikire-mfb">Ikire MFB</option>
+                                <option value="imo-state-mfb">Imo Microfinance bank</option>
+                                <option value="imperial-homes-mob">IMPERIAL HOMES MORTGAGE BANK (FORMERLY GTHOMES)</option>
+                                <option value="infinity-mfb">Infinity MFB</option>
+                                <option value="infinity-mb">Infinity trust Mortgage Bank</option>
+                                <option value="innovectives-kesh">Innovectives Kesh</option>
+                                <option value="irl-mfb">IRL Microfinance Bank</option>
+                                <option value="jaiz">JAIZ BANK</option>
+                                <option value="jubliee-life">Jubilee Life</option>
+                                <option value="kadick-integration">Kadick Integration Limited</option>
+                                <option value="kadpoly-mfb">Kadpoly MICROFINANCE BANK</option>
+                                <option value="kcmb-mfb">KCMB MFB</option>
+                                <option value="keystone">KEYSTONE BANK PLC</option>
+                                <option value="kontagora-mfb">Kontagora MFB</option>
+                                <option value="kuda-mfb">Kuda Microfinance Bank</option>
+                                <option value="lapo-mfb">Lapo MFB</option>
+                                <option value="lavender-mfb">Lavender Microfinance bank</option>
+                                <option value="letshego-mfb">Letshego MFB</option>
+                                <option value="lovonus-mfb">Lovonus Microfinance bank</option>
+                                <option value="mainland-mfb">Mainland MICROFINANCE BANK</option>
+                                <option value="mainstreet-mfb">Mainstreet MFB</option>
+                                <option value="malachy-mfb">Malachy MFB</option>
+                                <option value="manny-mfb">Manny Microfinance Bank</option>
+                                <option value="mayfair-mfb">Mayfair MFB</option>
+                                <option value="mayFresh-mortgage">MayFresh Mortgage Bank</option>
+                                <option value="megapraise-mfb">Megapraise Microfinance Bank</option>
+                                <option value="midland-mfb">Midland MFB</option>
+                                <option value="mint-finex-mfb">MINT-FINEX MFB</option>
+                                <option value="money-trust-mfb">MONEYTRUST MFB</option>
+                                <option value="money-box">Moneybox</option>
+                                <option value="mutual-benefits-mfb">Mutual Benefits MFB</option>
+                                <option value="mutual-trust-mfb">Mutual Trust Microfinance Bank</option>
+                                <option value="nagarta-mfb">Nargata MFB</option>
+                                <option value="navy-mfb">Navy Microfinance bank</option>
+                                <option value="ndiorah-mfb">NDIORAH MICROFINANCE BANK LTD.</option>
+                                <option value="new-prudential">New Prudential Bank</option>
+                                <option value="nirsal-mfb">NIRSAL National microfinance bank</option>
+                                <option value="nnew-women-mfb">Nnew women MFB</option>
+                                <option value="nova-meb">NOVA Merchant Bank</option>
+                                <option value="npf-mfb">NPF MFB</option>
+                                <option value="oche-mfb">Oche MFB</option>
+                                <option value="ohafia-mfb">OHAFIA MFB</option>
+                                <option value="okpoga-mfb">Okpoga MFB</option>
+                                <option value="olabisi-onabanjo-mfb">Olabisi Onabanjo university Microfinance bank</option>
+                                <option value="omiye-mfb">Omiye MFB</option>
+                                <option value="one-finance">One Finance</option>
+                                <option value="paga">Paga</option>
+                                <option value="page-mfb">PAGE FINANCIALS</option>
+                                <option value="palmpay">PalmPay</option>
+                                <option value="parallex">Parrallex</option>
+                                <option value="parkway">Parkway (Ready Cash)</option>
+                                <option value="patrick-gold-mfb">Patrick Gold</option>
+                                <option value="pay-attitude-online">PayAttitude Online</option>
+                                <option value="paycom">OPay</option>
+                                <option value="pecanTrust-mfb">Pecan Trust Microfinance Bank</option>
+                                <option value="pennywise-mfb">Pennywise Microfinance bank</option>
+                                <option value="personal-trust-mfb">Personal Trust MFB</option>
+                                <option value="petra-mfb">Petra Microfinance Bank</option>
+                                <option value="pillar-mfb">Pillar MFB</option>
+                                <option value="platinum-mb">PLATINUM MORTGAGE BANK</option>
+                                <option value="polaris">POLARIS BANK</option>
+                                <option value="polyuwanna-mfb">Polyuwanna MFB</option>
+                                <option value="prestige-mfb">Prestige Microfinance bank</option>
+                                <option value="providus">Providus Bank</option>
+                                <option value="purplemoney-mfb">Purplemoney MFB</option>
+                                <option value="quickfund-mfb">QuickFund Microfinance bank</option>
+                                <option value="rahama-mfb">Rahama MFB</option>
+                                <option value="rand-meb">Rand Merchant Bank</option>
+                                <option value="refuge-mb">Refuge Mortgage Bank</option>
+                                <option value="regent-mfb">REGENT MFB</option>
+                                <option value="reliance-mfb">Reliance MFB</option>
+                                <option value="renmoney-mfb">Renmoney microfinance bank</option>
+                                <option value="rephidim-mfb">REPHIDIM MICROFINANCE BANK</option>
+                                <option value="richway-mfb">RICHWAY MFB</option>
+                                <option value="royal-exchange-mfb">Royal Exchange MFB</option>
+                                <option value="rubies-mfb">RUBIES MFB</option>
+                                <option value="safe-haven-mfb">Safe Haven MFB</option>
+                                <option value="safetrust">SafeTrust Mortgage Bank</option>
+                                <option value="sagamu-mfb">Sagamu Microfinance Bank</option>
+                                <option value="seed-capital-mfb">SEED CAPITAL MICROFINANCE BANK</option>
+                                <option value="sparkle">SPARKLE MICROFINANCE BANK</option>
+                                <option value="stanbic-ibtc-ease-wallet">Stanbic IBTC @ease Wallet</option>
+                                <option value="stanbic">STANBIC IBTC BANK PLC</option>
+                                <option value="standard-chartered">STANDARD CHARTERED BANK PLC</option>
+                                <option value="stanford-mfb">Stanford MFB</option>
+                                <option value="stellas-mfb">Stellas Microfinance bank</option>
+                                <option value="sterling">STERLING BANK PLC</option>
+                                <option value="sulsap-mfb">Sulsap MFB</option>
+                                <option value="suntrust">SUNTRUST BANK</option>
+                                <option value="taj">TAJ BANK</option>
+                                <option value="tcf-mfb">TCF</option>
+                                <option value="teasy-mobile">Teasy Mobile</option>
+                                <option value="titan">TITAN TRUST BANK</option>
+                                <option value="trident-mfb">Trident Microfinance Bank</option>
+                                <option value="trustbond-mb">Trustbond</option>
+                                <option value="u-and-c-mfb">U AND C MFB</option>
+                                <option value="unaab-mfb">UNAAB MICROFINANCE BANK</option>
+                                <option value="uniben-mfb">Uniben Microfinance bank</option>
+                                <option value="unical-mfb">Unical MFB</option>
+                                <option value="unionbank">UNION BANK OF NIGERIA PLC</option>
+                                <option value="uba">UNITED BANK FOR AFRICA PLC</option>
+                                <option value="unity">UNITY BANK PLC</option>
+                                <option value="unn-mfb">UNN Microfinance bank</option>
+                                <option value="vfd-mfb">VFD MICROFINANCE BANK</option>
+                                <option value="virtue-mfb">Virtue MFB</option>
+                                <option value="visa-mfb">Visa Microfinance Bank</option>
+                                <option value="vt-networks">VTNetwork</option>
+                                <option value="wema">WEMA BANK PLC</option>
+                                <option value="wetland-mfb">WETLAND MFB</option>
+                                <option value="xslnce-mfb">XSLNCE Microfinance Bank</option>
+                                <option value="yes-mfb">Yes MFB</option>
+                                <option value="zenith">ZENITH BANK PLC</option>
+                                <option value="zenith-mobile">Zenith Mobile</option>
+                                <option value="zinternet-kongapay">Zinternet - KongaPay</option>
+                            </select>
+                            <div class="select-arrow">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="accountNumber">Account Number</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="accountNumber" name="accountNumber" placeholder="Enter 10-digit account number" maxlength="10" pattern="[0-9]{10}" required>
+                            <div class="input-icon verify-icon" id="verifyAccountBtn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="accountHolder" class="account-holder" style="display: none;">
+                        <div class="account-info">
+                            <span class="label">Account Name:</span>
+                            <span class="value" id="accountName"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailAddress">Email Address</label>
+                        <div class="input-wrapper">
+                            <input type="email" id="emailAddress" name="emailAddress" placeholder="Enter your email address" required>
+                            <div class="input-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pin">Enter your 6-digit PIN</label>
+                        <div class="pin-input-container">
+                            <input type="password" class="pin-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                            <input type="password" class="pin-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                            <input type="password" class="pin-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                            <input type="password" class="pin-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                            <input type="password" class="pin-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                            <input type="password" class="pin-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                            <input type="hidden" id="pinComplete" name="pin" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <span>Withdraw Funds</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+                    </button>
+                </form>
+
+                <div class="powered-by fade-in">
+                    <p>Secured by</p>
+                    <div class="payment-methods">
+                        <img src="{% static 'images/visa.png' %}" alt="Visa" class="payment-logo">
+                        <img src="{% static 'images/mastercard.png' %}" alt="Mastercard" class="payment-logo">
+                        <img src="//logotyp.us/file/flutterwave.svg" alt="Flutterwave" class="payment-logo">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Withdrawal History Card -->
+            <div class="history-card slide-in">
+                <div class="card-header">
+                    <h2>Withdrawal History</h2>
+                </div>
+                
+                <div class="history-table-container">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for withdrawal in withdrawals %}
+                            <tr>
+                                <td>NGN {{ withdrawal.amount }}</td>
+                                <td>{{ withdrawal.created_at|date:"d M Y" }}</td>
+                                <td>
+                                    <span class="status-badge status-{{ withdrawal.status|lower }}">
+                                        {{ withdrawal.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="empty-state">
+                                    <div class="empty-state-content">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                                        <p>No withdrawal history yet</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav slide-up">
+            <a href="{% url 'refer' %}?user_id={{ user.telegram_id }}" class="nav-item">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <span>REFERRAL</span>
+            </a>
+            <a href="{% url 'index' %}?user_id={{ user.telegram_id }}" class="nav-item">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <span>DASHBOARD</span>
+            </a>
+            <a href="{% url 'withdraw' %}?user_id={{ user.telegram_id }}" class="nav-item active">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                </div>
+                <span>WITHDRAW</span>
+            </a>
+            <a href="{% url 'ads' %}?user_id={{ user.telegram_id }}" class="nav-item">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                </div>
+                <span>ADS</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="popup" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"></h3>
+                <button class="modal-close">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-icon">
+                    <svg class="icon-success" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    <svg class="icon-error" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                    <svg class="icon-info" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    <div class="loading-spinner"></div>
+                </div>
+                <div class="modal-message"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="{% static 'js/withdraw.js' %}"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        const tgApp = window.Telegram.WebApp;
+        tgApp.ready();
+        tgApp.expand();
+    </script>
+</body>
+</html>

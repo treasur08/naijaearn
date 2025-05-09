@@ -1,0 +1,207 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refer & Earn</title>
+    <link rel="stylesheet" href="{% static 'css/refer.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+</head>
+<body>
+    <div class="animated-background"></div>
+    <div id="particles-js" class="particles-container"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header class="fade-in">
+            <h1>Welcome, <span class="highlight">{{user.first_name}}</span></h1>
+            <div class="header-buttons">
+                <button id="themeToggle" class="theme-toggle-btn">
+                    <span class="sun"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
+                    <span class="moon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
+                </button>
+                <button class="profile-btn" id="profileBtn">
+                    <img src="{{ user.profile_photo_url|default:'/static/images/default-profile.png' }}" alt="Profile Photo" id="profilePic" class="profile-image" width="32" height="32">
+                </button>
+            </div>
+        </header>
+
+        <!-- Balance Card -->
+        <div class="balance-card slide-in">
+            <div class="balance-card-content">
+                <h2>Your Affiliate Balance</h2>
+                <div class="balance-amount">{{ user.affiliate_balance }}</div>
+            </div>
+            <div class="wallet-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+            </div>
+        </div>
+
+        <!-- Referral Section -->
+        <h2 class="refer-title fade-in">REFER AND EARN</h2>
+
+        <!-- Referral Stats -->
+        <div class="stat-card slide-in">
+            <h3>Number of Referrals: <span id="refCount" class="highlight">{{ref_count}}</span></h3>
+        </div>
+
+        <div class="stat-card slide-in">
+            <h3>Referral Earnings: <span id="refEarning" class="highlight">{{ref_earning}}</span></h3>
+        </div>
+
+        <!-- Referral Link -->
+        <div class="link-card fade-in">
+            <div class="link-text" id="referralLink">
+                {% if bot_username %}
+                    https://t.me/{{ bot_username }}?start={{ user.telegram_id }}
+                {% else %}
+                    https://t.me/flipdacoinbot?start={{ user.telegram_id }}
+                {% endif %}
+            </div>
+            <div class="link-actions">
+                <button class="copy-btn" id="copyBtn" aria-label="Copy link" onclick="copyReferralLink()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                </button>
+                <button class="share-btn" id="shareBtn" aria-label="Share link" onclick="shareReferralLink()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                </button>
+            </div>
+        </div>
+
+                <!-- Enhanced Analytics Dashboard -->
+                <!-- Enhanced Analytics Dashboard -->
+        <div class="analytics-container fade-in">
+            <div class="analytics-header">
+                <h3>Referral Analytics</h3>
+                <div class="timerange-selector">
+                    <button data-range="10" class="active">Last 10 Days</button>
+                </div>
+            </div>
+            
+            <div class="analytics-card">
+                <div class="current-stats">
+                    <div class="current-total">
+                        <div class="total-label">Total Referrals</div>
+                        <div class="total-value" id="totalReferrals">{{ref_count}}</div>
+                    </div>
+                    <div class="current-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            </span>
+                            <span class="detail-label">Last 10 days</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                            </span>
+                            <span class="detail-label">Daily avg: <span id="avgReferrals">0</span></span>
+                        </div>
+                        <div class="detail-item trend-item" id="trendIndicator">
+                            <span class="detail-icon" id="trendIcon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                            </span>
+                            <span class="detail-label">Trend: <span id="trendPercentage">0%</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="current-point-details">
+                    <div id="currentPointDate">Today</div>
+                    <div id="currentPointValue">{{ today_referrals|default:0 }} referrals</div>
+                </div>
+                
+                <div class="chart-container">
+                    <h2>Daily Referrals (Last 10 Days)</h2>
+                    <canvas id="referralChart" height="250"></canvas>
+                    
+                </div>
+            </div>
+        </div>
+
+        
+        <!-- Referral List -->
+        <div class="referral-list fade-in">
+            <h3>Your Referrals</h3>
+            <ul id="referralList">
+                {% for referral in referrals %}
+                <li>You referred <strong>{{ referral.first_name }}</strong> {% if referral.referrer_rewarded %}and earned <span class="highlight">NGN 300</span> 🎉{% endif %}</li>
+                {% empty %}
+                <li>You haven't referred anyone yet. Share your link to start earning!</li>
+                {% endfor %}
+            </ul>
+            {% if total_referrals > 5 %}
+            <p>And {{ total_referrals|add:"-5" }} more referrals...</p>
+            {% endif %}
+        </div>
+
+        <!-- Leaderboard Section -->
+        <div class="leaderboard-container fade-in">
+            <h3>Top Earners</h3>
+            <div class="user-rank">Your Standing: #{{ user_rank }}</div>
+            
+            <div class="leaderboard-list">
+                {% for top_user in top_users %}
+                <div class="leaderboard-item {% if top_user.telegram_id == user.telegram_id %}highlight-user{% endif %}">
+                    <div class="rank">{{ forloop.counter }}</div>
+                    <img src="{{ top_user.profile_photo_url|default:'/static/images/default-profile.png' }}" 
+                        alt="Profile" class="leaderboard-profile-pic">
+                    <div class="user-info">
+                        <span class="user-name">{{ top_user.first_name }}</span>
+                        <span class="user-stats">
+                            NGN {{ top_user.referral_bonus|floatformat:2 }} • 
+                            {{ top_user.referrals.count }} Referrals
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Piggy Bank Image -->
+        <div class="piggy-bank bounce">
+            <img src="{% static 'images/naijaearn.png' %}" alt="NAIJA EARN">
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav slide-up">
+            <a href="{% url 'refer' %}?user_id={{ user.telegram_id }}" class="nav-item" active>
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <span>REFERRAL</span>
+            </a>
+            <a href="{% url 'index' %}?user_id={{ user.telegram_id }}" class="nav-item">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <span>DASHBOARD</span>
+            </a>
+            <a href="{% url 'withdraw' %}?user_id={{ user.telegram_id }}" class="nav-item">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                </div>
+                <span>WITHDRAW</span>
+            </a>
+            <a href="{% url 'ads' %}?user_id={{ user.telegram_id }}" class="nav-item">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                </div>
+                <span>ADS</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="{% static 'js/referal.js' %}"></script>
+    <script src="{% static 'js/referral-chart.js' %}"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        const tgApp = window.Telegram && window.Telegram.WebApp;
+        if (tgApp) {
+            tgApp.ready();
+            tgApp.expand();
+        }
+    </script>
+</body>
+</html>
