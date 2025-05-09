@@ -383,6 +383,34 @@ async def get_ip(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         logger.error(f"Error fetching IP information: {str(e)}")
         await update.message.reply_text(f"❌ Error fetching IP information: {str(e)}")
 
+import threading
+import time
+
+def ping_server_thread():
+    """Ping the server every 7 minutes to keep it alive - runs in a separate thread."""
+    while True:
+        try:
+            logger.info("Pinging server to keep alive...")
+            # Use a synchronous request since we're in a separate thread
+            response = httpx.get(f"{API_BASE_URL}/ping/", timeout=10.0)
+            if response.status_code == 200:
+                logger.info(f"Ping successful: {response.text}")
+            else:
+                logger.warning(f"Ping failed with status code: {response.status_code}")
+        except Exception as e:
+            logger.error(f"Error pinging server: {str(e)}")
+        
+        # Wait for 7 minutes
+        time.sleep(420)  # 7 minutes = 420 seconds
+
+def start_ping_thread():
+    """Start the ping server function in a separate thread."""
+    ping_thread = threading.Thread(target=ping_server_thread, daemon=True)
+    ping_thread.start()
+    logger.info("Started ping server thread")
+    return ping_thread
+
+
 def run_bot():
     
     application = (
@@ -399,7 +427,7 @@ def run_bot():
 
     application.add_handler(MessageHandler(filters.TEXT | filters.PHOTO, handle_broadcast_content))
     
-    
+    start_ping_thread()
     
     application.run_polling()
     
