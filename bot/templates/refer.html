@@ -125,7 +125,7 @@
             <h3>Your Referrals</h3>
             <ul id="referralList">
                 {% for referral in referrals %}
-                <li>You referred <strong>{{ referral.first_name }}</strong> {% if referral.referrer_rewarded %}and earned <span class="highlight">NGN 300</span> 🎉{% endif %}</li>
+                <li>You referred <strong>{{ referral.first_name }}</strong> {% if referral.referrer_rewarded %}and earned <span class="highlight">NGN 400</span> 🎉{% endif %}</li>
                 {% empty %}
                 <li>You haven't referred anyone yet. Share your link to start earning!</li>
                 {% endfor %}

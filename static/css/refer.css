@@ -340,7 +340,10 @@ header {
   height: 3px;
   background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
 }
-
+.highlight {
+  position: relative;
+  display: inline-block;
+}
 /* Enhanced Stat Cards */
 .stat-card {
   background: rgba(42, 48, 66, 0.7);

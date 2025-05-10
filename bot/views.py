@@ -146,7 +146,7 @@ def index(request):
             earnings.append({
                 'type': 'referral',
                 'title': f'Referred {referral.first_name}',
-                'amount': 500.00,
+                'amount': 400.00,
                 'date': getattr(referral, 'created_at', timezone.now())
             })
         
@@ -528,8 +528,8 @@ def activate(request):
 
                 if user.referrer and not user.referrer_rewarded:
                     referrer = user.referrer
-                    referrer.affiliate_balance += Decimal('500.00')
-                    referrer.referral_bonus += 500
+                    referrer.affiliate_balance += Decimal('400.00')
+                    referrer.referral_bonus += 400
                     referrer.save()
                     
                     referrer.update_total_balance()

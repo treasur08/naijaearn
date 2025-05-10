@@ -434,7 +434,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   function calculateAmountAfterFee(amount) {
-    const feePercentage = 0.06; // 6%
+    const feePercentage = 0.15; // 15%
     const fee = amount * feePercentage;
     return amount - fee;
   }
@@ -821,7 +821,7 @@ document.addEventListener("DOMContentLoaded", () => {
       
       const enteredAmount = Number.parseFloat(amountInput.value.replace(/,/g, ""));
     
-      // Calculate amount after fee deduction (6%)
+      // Calculate amount after fee deduction (15%)
       const amountAfterFee = calculateAmountAfterFee(enteredAmount);
 
       // Validate minimum amount
